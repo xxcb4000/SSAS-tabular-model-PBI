@@ -1,0 +1,764 @@
+{
+  "name": "SemanticModel",
+  "compatibilityLevel": 1500,
+  "model": {
+    "culture": "fr-BE",
+    "dataSources": [
+      {
+        "type": "structured",
+        "name": "File/C:\\Users\\studentdot0209\\Documents\\SSAS\\propre Dataset_AdventureWorks xlsx",
+        "connectionDetails": {
+          "protocol": "file",
+          "address": {
+            "path": "C:\\Users\\studentdot0209\\Documents\\SSAS\\propre Dataset_AdventureWorks.xlsx"
+          },
+          "authentication": null,
+          "query": null
+        },
+        "options": {},
+        "credential": {
+          "AuthenticationKind": "ServiceAccount",
+          "kind": "File",
+          "path": "c:\\users\\studentdot0209\\documents\\ssas\\propre dataset_adventureworks.xlsx"
+        },
+        "contextExpression": [
+          "let",
+          "    #\"0001\" = Excel.Workbook(..., null, true)",
+          "in",
+          "    #\"0001\""
+        ]
+      }
+    ],
+    "tables": [
+      {
+        "name": "DimCustomers1",
+        "columns": [
+          {
+            "name": "CustomerKey",
+            "dataType": "int64",
+            "sourceColumn": "CustomerKey"
+          },
+          {
+            "name": "GeographyKey",
+            "dataType": "int64",
+            "sourceColumn": "GeographyKey"
+          },
+          {
+            "name": "Name",
+            "dataType": "string",
+            "sourceColumn": "Name"
+          },
+          {
+            "name": "BirthDate",
+            "dataType": "dateTime",
+            "sourceColumn": "BirthDate"
+          },
+          {
+            "name": "MaritalStatus",
+            "dataType": "string",
+            "sourceColumn": "MaritalStatus"
+          },
+          {
+            "name": "Gender",
+            "dataType": "string",
+            "sourceColumn": "Gender"
+          },
+          {
+            "name": "YearlyIncome",
+            "dataType": "int64",
+            "sourceColumn": "YearlyIncome"
+          },
+          {
+            "name": "NumberChildrenAtHome",
+            "dataType": "int64",
+            "sourceColumn": "NumberChildrenAtHome"
+          },
+          {
+            "name": "Occupation",
+            "dataType": "string",
+            "sourceColumn": "Occupation"
+          },
+          {
+            "name": "HouseOwnerFlag",
+            "dataType": "int64",
+            "sourceColumn": "HouseOwnerFlag"
+          },
+          {
+            "name": "NumberCarsOwned",
+            "dataType": "int64",
+            "sourceColumn": "NumberCarsOwned"
+          },
+          {
+            "name": "AddressLine1",
+            "dataType": "string",
+            "sourceColumn": "AddressLine1"
+          },
+          {
+            "name": "AddressLine2",
+            "dataType": "string",
+            "sourceColumn": "AddressLine2"
+          },
+          {
+            "name": "Phone",
+            "dataType": "string",
+            "sourceColumn": "Phone"
+          },
+          {
+            "name": "DateFirstPurchase",
+            "dataType": "dateTime",
+            "sourceColumn": "DateFirstPurchase"
+          },
+          {
+            "type": "calculated",
+            "name": "Colonne calculée 1",
+            "dataType": "int64",
+            "isDataTypeInferred": true,
+            "expression": "year(NOW()-[BirthDate])-1900"
+          },
+          {
+            "type": "calculated",
+            "name": "Colonne calculée 2",
+            "dataType": "string",
+            "isDataTypeInferred": true,
+            "expression": "RIGHT([Name],2) & RIGHT([Phone], 3)"
+          },
+          {
+            "type": "calculated",
+            "name": "Colonne calculée 3",
+            "dataType": "string",
+            "isDataTypeInferred": true,
+            "expression": "LEFT([Name], 1) & REPT(\"*\", LEN([Name]) - 2) & RIGHT([Name], 1)"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"File/C:\\Users\\studentdot0209\\Documents\\SSAS\\propre Dataset_AdventureWorks xlsx\",",
+                "    DimCustomers_Table = Source{[Item=\"DimCustomers\",Kind=\"Table\"]}[Data],",
+                "    #\"Type modifié\" = Table.TransformColumnTypes(DimCustomers_Table,{{\"CustomerKey\", Int64.Type}, {\"GeographyKey\", Int64.Type}, {\"Name\", type text}, {\"BirthDate\", type date}, {\"MaritalStatus\", type text}, {\"Gender\", type text}, {\"YearlyIncome\", Int64.Type}, {\"NumberChildrenAtHome\", Int64.Type}, {\"Occupation\", type text}, {\"HouseOwnerFlag\", Int64.Type}, {\"NumberCarsOwned\", Int64.Type}, {\"AddressLine1\", type text}, {\"AddressLine2\", type any}, {\"Phone\", type text}, {\"DateFirstPurchase\", type date}})",
+                "in",
+                "    #\"Type modifié\""
+              ]
+            }
+          }
+        ],
+        "measures": [
+          {
+            "name": "Nbre customers",
+            "expression": "DISTINCTCOUNT([CustomerKey])"
+          },
+          {
+            "name": "kpi completude",
+            "expression": " COUNT(DimCustomers1[AddressLine2]) / ((COUNT(DimCustomers1[AddressLine2])+COUNTBLANK(DimCustomers1[AddressLine2]))) *100"
+          }
+        ]
+      },
+      {
+        "name": "DimDate2",
+        "columns": [
+          {
+            "name": "ID",
+            "dataType": "int64",
+            "sourceColumn": "ID"
+          },
+          {
+            "name": "Date",
+            "dataType": "dateTime",
+            "sourceColumn": "Date"
+          },
+          {
+            "name": "DayNumberOfWeek",
+            "dataType": "int64",
+            "sourceColumn": "DayNumberOfWeek"
+          },
+          {
+            "name": "DayName",
+            "dataType": "string",
+            "sourceColumn": "DayName"
+          },
+          {
+            "name": "DayNumberOfMonth",
+            "dataType": "int64",
+            "sourceColumn": "DayNumberOfMonth"
+          },
+          {
+            "name": "DayNumberOfYear",
+            "dataType": "int64",
+            "sourceColumn": "DayNumberOfYear"
+          },
+          {
+            "name": "WeekNumberOfYear",
+            "dataType": "int64",
+            "sourceColumn": "WeekNumberOfYear"
+          },
+          {
+            "name": "MonthName",
+            "dataType": "string",
+            "sourceColumn": "MonthName"
+          },
+          {
+            "name": "MonthNumberOfYear",
+            "dataType": "int64",
+            "sourceColumn": "MonthNumberOfYear"
+          },
+          {
+            "name": "CalendarQuarter",
+            "dataType": "int64",
+            "sourceColumn": "CalendarQuarter"
+          },
+          {
+            "name": "CalendarYear",
+            "dataType": "int64",
+            "sourceColumn": "CalendarYear"
+          },
+          {
+            "name": "FiscalQuarter",
+            "dataType": "int64",
+            "sourceColumn": "FiscalQuarter"
+          },
+          {
+            "name": "FiscalYear",
+            "dataType": "int64",
+            "sourceColumn": "FiscalYear"
+          },
+          {
+            "name": "FiscalSemester",
+            "dataType": "int64",
+            "sourceColumn": "FiscalSemester"
+          },
+          {
+            "name": "Period",
+            "dataType": "int64",
+            "sourceColumn": "Period"
+          },
+          {
+            "type": "calculated",
+            "name": "Colonne calculée 1",
+            "dataType": "dateTime",
+            "isDataTypeInferred": true,
+            "expression": " [Date]+1"
+          },
+          {
+            "type": "calculated",
+            "name": "Colonne calculée 2",
+            "dataType": "string",
+            "isDataTypeInferred": true,
+            "expression": "if([DayName] in {\"Monday\", \"Tuesday\", \"Wednesday\", \"Thursday\",\"Friday\"}, \"Weekday flag\", \"Weekend flag\")"
+          },
+          {
+            "type": "calculated",
+            "name": "Colonne calculée 3",
+            "dataType": "string",
+            "isDataTypeInferred": true,
+            "expression": "if([MonthNumberOfYear] in {9, 10, 11}, \"First fiscal quarter\", if([MonthNumberOfYear] in {12, 1, 2}, \"Second fiscal quarter\", if([MonthNumberOfYear] in {3, 4, 5}, \"Third fiscal quarter\", \"Fourth fiscal quarter\")))"
+          },
+          {
+            "type": "calculated",
+            "name": "Colonne calculée 4",
+            "dataType": "string",
+            "isDataTypeInferred": true,
+            "expression": "if([MonthNumberOfYear]<7, \"1st semester\", \"second semester\")"
+          },
+          {
+            "type": "calculated",
+            "name": "Colonne calculée 5",
+            "dataType": "string",
+            "isDataTypeInferred": true,
+            "expression": "FORMAT([Date], \"yyyy - MMMM\")"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"File/C:\\Users\\studentdot0209\\Documents\\SSAS\\propre Dataset_AdventureWorks xlsx\",",
+                "    DimDate_Table = Source{[Item=\"DimDate\",Kind=\"Table\"]}[Data],",
+                "    #\"Type modifié\" = Table.TransformColumnTypes(DimDate_Table,{{\"ID\", Int64.Type}, {\"Date\", type date}, {\"DayNumberOfWeek\", Int64.Type}, {\"DayName\", type text}, {\"DayNumberOfMonth\", Int64.Type}, {\"DayNumberOfYear\", Int64.Type}, {\"WeekNumberOfYear\", Int64.Type}, {\"MonthName\", type text}, {\"MonthNumberOfYear\", Int64.Type}, {\"CalendarQuarter\", Int64.Type}, {\"CalendarYear\", Int64.Type}, {\"FiscalQuarter\", Int64.Type}, {\"FiscalYear\", Int64.Type}, {\"FiscalSemester\", Int64.Type}, {\"Period\", Int64.Type}})",
+                "in",
+                "    #\"Type modifié\""
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "dimProductCategory3",
+        "columns": [
+          {
+            "name": "ProductCategoryKey",
+            "dataType": "int64",
+            "sourceColumn": "ProductCategoryKey"
+          },
+          {
+            "name": "ProductCategoryAlternateKey",
+            "dataType": "int64",
+            "sourceColumn": "ProductCategoryAlternateKey"
+          },
+          {
+            "name": "EnglishProductCategoryName",
+            "dataType": "string",
+            "sourceColumn": "EnglishProductCategoryName"
+          },
+          {
+            "name": "SpanishProductCategoryName",
+            "dataType": "string",
+            "sourceColumn": "SpanishProductCategoryName"
+          },
+          {
+            "name": "FrenchProductCategoryName",
+            "dataType": "string",
+            "sourceColumn": "FrenchProductCategoryName"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"File/C:\\Users\\studentdot0209\\Documents\\SSAS\\propre Dataset_AdventureWorks xlsx\",",
+                "    dimProductCategory_Table = Source{[Item=\"dimProductCategory\",Kind=\"Table\"]}[Data],",
+                "    #\"Type modifié\" = Table.TransformColumnTypes(dimProductCategory_Table,{{\"ProductCategoryKey\", Int64.Type}, {\"ProductCategoryAlternateKey\", Int64.Type}, {\"EnglishProductCategoryName\", type text}, {\"SpanishProductCategoryName\", type text}, {\"FrenchProductCategoryName\", type text}})",
+                "in",
+                "    #\"Type modifié\""
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "DimProducts4",
+        "columns": [
+          {
+            "name": "ProductKey",
+            "dataType": "int64",
+            "sourceColumn": "ProductKey"
+          },
+          {
+            "name": "ProductSubcategoryKey",
+            "dataType": "int64",
+            "sourceColumn": "ProductSubcategoryKey"
+          },
+          {
+            "name": "ProductName",
+            "dataType": "string",
+            "sourceColumn": "ProductName"
+          },
+          {
+            "name": "StandardCost",
+            "dataType": "double",
+            "sourceColumn": "StandardCost"
+          },
+          {
+            "name": "Color",
+            "dataType": "string",
+            "sourceColumn": "Color"
+          },
+          {
+            "name": "SafetyStockLevel",
+            "dataType": "int64",
+            "sourceColumn": "SafetyStockLevel"
+          },
+          {
+            "name": "ListPrice",
+            "dataType": "double",
+            "sourceColumn": "ListPrice"
+          },
+          {
+            "name": "Size",
+            "dataType": "string",
+            "sourceColumn": "Size"
+          },
+          {
+            "name": "SizeRange",
+            "dataType": "string",
+            "sourceColumn": "SizeRange"
+          },
+          {
+            "name": "Weight",
+            "dataType": "double",
+            "sourceColumn": "Weight"
+          },
+          {
+            "name": "DaysToManufacture",
+            "dataType": "int64",
+            "sourceColumn": "DaysToManufacture"
+          },
+          {
+            "name": "ProductLine",
+            "dataType": "string",
+            "sourceColumn": "ProductLine"
+          },
+          {
+            "name": "DealerPrice",
+            "dataType": "double",
+            "sourceColumn": "DealerPrice"
+          },
+          {
+            "name": "Class",
+            "dataType": "string",
+            "sourceColumn": "Class"
+          },
+          {
+            "name": "ModelName",
+            "dataType": "string",
+            "sourceColumn": "ModelName"
+          },
+          {
+            "name": "Description",
+            "dataType": "string",
+            "sourceColumn": "Description"
+          },
+          {
+            "name": "StartDate",
+            "dataType": "dateTime",
+            "sourceColumn": "StartDate"
+          },
+          {
+            "name": "EndDate",
+            "dataType": "dateTime",
+            "sourceColumn": "EndDate"
+          },
+          {
+            "name": "Status",
+            "dataType": "string",
+            "sourceColumn": "Status"
+          },
+          {
+            "name": "SubCategory",
+            "dataType": "string",
+            "sourceColumn": "SubCategory"
+          },
+          {
+            "name": "Category",
+            "dataType": "string",
+            "sourceColumn": "Category"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"File/C:\\Users\\studentdot0209\\Documents\\SSAS\\propre Dataset_AdventureWorks xlsx\",",
+                "    DimProducts_Table = Source{[Item=\"DimProducts\",Kind=\"Table\"]}[Data],",
+                "    #\"Type modifié\" = Table.TransformColumnTypes(DimProducts_Table,{{\"ProductKey\", Int64.Type}, {\"ProductSubcategoryKey\", Int64.Type}, {\"ProductName\", type text}, {\"StandardCost\", type number}, {\"Color\", type text}, {\"SafetyStockLevel\", Int64.Type}, {\"ListPrice\", type number}, {\"Size\", type text}, {\"SizeRange\", type text}, {\"Weight\", type number}, {\"DaysToManufacture\", Int64.Type}, {\"ProductLine\", type text}, {\"DealerPrice\", type number}, {\"Class\", type text}, {\"ModelName\", type text}, {\"Description\", type text}, {\"StartDate\", type date}, {\"EndDate\", type date}, {\"Status\", type text}, {\"SubCategory\", type text}, {\"Category\", type text}})",
+                "in",
+                "    #\"Type modifié\""
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "dimProductSubCategory5",
+        "columns": [
+          {
+            "name": "ProductSubcategoryKey",
+            "dataType": "int64",
+            "sourceColumn": "ProductSubcategoryKey"
+          },
+          {
+            "name": "ProductSubcategoryAlternateKey",
+            "dataType": "int64",
+            "sourceColumn": "ProductSubcategoryAlternateKey"
+          },
+          {
+            "name": "EnglishProductSubcategoryName",
+            "dataType": "string",
+            "sourceColumn": "EnglishProductSubcategoryName"
+          },
+          {
+            "name": "SpanishProductSubcategoryName",
+            "dataType": "string",
+            "sourceColumn": "SpanishProductSubcategoryName"
+          },
+          {
+            "name": "FrenchProductSubcategoryName",
+            "dataType": "string",
+            "sourceColumn": "FrenchProductSubcategoryName"
+          },
+          {
+            "name": "ProductCategoryKey",
+            "dataType": "int64",
+            "sourceColumn": "ProductCategoryKey"
+          },
+          {
+            "name": "Category",
+            "dataType": "string",
+            "sourceColumn": "Category"
+          },
+          {
+            "name": "Category_french",
+            "dataType": "string",
+            "sourceColumn": "Category_french"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"File/C:\\Users\\studentdot0209\\Documents\\SSAS\\propre Dataset_AdventureWorks xlsx\",",
+                "    dimProductSubCategory_Table = Source{[Item=\"dimProductSubCategory\",Kind=\"Table\"]}[Data],",
+                "    #\"Type modifié\" = Table.TransformColumnTypes(dimProductSubCategory_Table,{{\"ProductSubcategoryKey\", Int64.Type}, {\"ProductSubcategoryAlternateKey\", Int64.Type}, {\"EnglishProductSubcategoryName\", type text}, {\"SpanishProductSubcategoryName\", type text}, {\"FrenchProductSubcategoryName\", type text}, {\"ProductCategoryKey\", Int64.Type}, {\"Category\", type text}, {\"Category_french\", type text}})",
+                "in",
+                "    #\"Type modifié\""
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "DimTerritory6",
+        "columns": [
+          {
+            "name": "Territory Key",
+            "dataType": "int64",
+            "sourceColumn": "Territory Key"
+          },
+          {
+            "name": "Region",
+            "dataType": "string",
+            "sourceColumn": "Region"
+          },
+          {
+            "name": "Country",
+            "dataType": "string",
+            "sourceColumn": "Country"
+          },
+          {
+            "name": "Group",
+            "dataType": "string",
+            "sourceColumn": "Group"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"File/C:\\Users\\studentdot0209\\Documents\\SSAS\\propre Dataset_AdventureWorks xlsx\",",
+                "    DimTerritory_Table = Source{[Item=\"DimTerritory\",Kind=\"Table\"]}[Data],",
+                "    #\"Type modifié\" = Table.TransformColumnTypes(DimTerritory_Table,{{\"Territory Key\", Int64.Type}, {\"Region\", type text}, {\"Country\", type text}, {\"Group\", type text}})",
+                "in",
+                "    #\"Type modifié\""
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "FactSales7",
+        "columns": [
+          {
+            "name": "ProductKey",
+            "dataType": "int64",
+            "sourceColumn": "ProductKey"
+          },
+          {
+            "name": "OrderDate",
+            "dataType": "dateTime",
+            "sourceColumn": "OrderDate"
+          },
+          {
+            "name": "ShipDate",
+            "dataType": "dateTime",
+            "sourceColumn": "ShipDate"
+          },
+          {
+            "name": "OrderDateKey",
+            "dataType": "int64",
+            "sourceColumn": "OrderDateKey"
+          },
+          {
+            "name": "CustomerKey",
+            "dataType": "int64",
+            "sourceColumn": "CustomerKey"
+          },
+          {
+            "name": "SalesTerritoryKey",
+            "dataType": "int64",
+            "sourceColumn": "SalesTerritoryKey"
+          },
+          {
+            "name": "SalesOrderNumber",
+            "dataType": "string",
+            "sourceColumn": "SalesOrderNumber"
+          },
+          {
+            "name": "SalesOrderLineNumber",
+            "dataType": "int64",
+            "sourceColumn": "SalesOrderLineNumber"
+          },
+          {
+            "name": "OrderQuantity",
+            "dataType": "int64",
+            "sourceColumn": "OrderQuantity"
+          },
+          {
+            "name": "UnitPrice",
+            "dataType": "double",
+            "sourceColumn": "UnitPrice"
+          },
+          {
+            "name": "ExtendedAmount",
+            "dataType": "double",
+            "sourceColumn": "ExtendedAmount"
+          },
+          {
+            "name": "UnitPriceDiscountPct",
+            "dataType": "int64",
+            "sourceColumn": "UnitPriceDiscountPct"
+          },
+          {
+            "name": "DiscountAmount",
+            "dataType": "int64",
+            "sourceColumn": "DiscountAmount"
+          },
+          {
+            "name": "ProductStandardCost",
+            "dataType": "double",
+            "sourceColumn": "ProductStandardCost"
+          },
+          {
+            "name": "TotalProductCost",
+            "dataType": "double",
+            "sourceColumn": "TotalProductCost"
+          },
+          {
+            "name": "SalesAmount",
+            "dataType": "double",
+            "sourceColumn": "SalesAmount"
+          },
+          {
+            "name": "TaxAmt",
+            "dataType": "double",
+            "sourceColumn": "TaxAmt"
+          },
+          {
+            "name": "Freight",
+            "dataType": "double",
+            "sourceColumn": "Freight"
+          },
+          {
+            "name": "RegionMonthID",
+            "dataType": "string",
+            "sourceColumn": "RegionMonthID"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"File/C:\\Users\\studentdot0209\\Documents\\SSAS\\propre Dataset_AdventureWorks xlsx\",",
+                "    FactSales_Table = Source{[Item=\"FactSales\",Kind=\"Table\"]}[Data],",
+                "    #\"Type modifié\" = Table.TransformColumnTypes(FactSales_Table,{{\"ProductKey\", Int64.Type}, {\"OrderDate\", type date}, {\"ShipDate\", type date}, {\"OrderDateKey\", Int64.Type}, {\"CustomerKey\", Int64.Type}, {\"SalesTerritoryKey\", Int64.Type}, {\"SalesOrderNumber\", type text}, {\"SalesOrderLineNumber\", Int64.Type}, {\"OrderQuantity\", Int64.Type}, {\"UnitPrice\", type number}, {\"ExtendedAmount\", type number}, {\"UnitPriceDiscountPct\", Int64.Type}, {\"DiscountAmount\", Int64.Type}, {\"ProductStandardCost\", type number}, {\"TotalProductCost\", type number}, {\"SalesAmount\", type number}, {\"TaxAmt\", type number}, {\"Freight\", type number}, {\"RegionMonthID\", type text}})",
+                "in",
+                "    #\"Type modifié\""
+              ]
+            }
+          }
+        ],
+        "measures": [
+          {
+            "name": "total tax paid",
+            "expression": " sum([TaxAmt])"
+          },
+          {
+            "name": "total margin",
+            "expression": " sum([SalesAmount]) - sum([TotalProductCost])"
+          },
+          {
+            "name": "total margin(%)",
+            "expression": " [total margin]/sum([SalesAmount])"
+          },
+          {
+            "name": "nbre customers actifs",
+            "expression": " DISTINCTCOUNT(FactSales7[CustomerKey])"
+          },
+          {
+            "name": "% customers actifs",
+            "expression": " [nbre customers actifs]/[Nbre customers]*100"
+          },
+          {
+            "name": "quantité moyenne",
+            "expression": " AVERAGE(FactSales7[OrderQuantity])"
+          },
+          {
+            "name": "profit",
+            "expression": "sum(FactSales7[SalesAmount])/ ( sum(FactSales7[SalesAmount]) - sum(FactSales7[TaxAmt]) - sum(FactSales7[TotalProductCost]) - sum(FactSales7[Freight]))"
+          }
+        ]
+      }
+    ],
+    "relationships": [
+      {
+        "name": "0907f378-222c-4f7d-8f6e-d4e4032e0e95",
+        "fromTable": "FactSales7",
+        "fromColumn": "ProductKey",
+        "toTable": "DimProducts4",
+        "toColumn": "ProductKey"
+      },
+      {
+        "name": "4265ccd7-9eac-4202-a955-0f676ee18e5e",
+        "fromTable": "FactSales7",
+        "fromColumn": "OrderDate",
+        "toTable": "DimDate2",
+        "toColumn": "Date"
+      },
+      {
+        "name": "832f2c87-1a81-4b42-a103-8675b9967999",
+        "fromTable": "FactSales7",
+        "fromColumn": "CustomerKey",
+        "toTable": "DimCustomers1",
+        "toColumn": "CustomerKey"
+      },
+      {
+        "name": "f897707f-cdff-4288-864f-2147183d4757",
+        "fromTable": "DimProducts4",
+        "fromColumn": "ProductSubcategoryKey",
+        "toTable": "dimProductSubCategory5",
+        "toColumn": "ProductSubcategoryKey"
+      },
+      {
+        "name": "910871f8-8280-4ed8-b32d-c182ee412df6",
+        "fromTable": "dimProductSubCategory5",
+        "fromColumn": "ProductCategoryKey",
+        "toTable": "dimProductCategory3",
+        "toColumn": "ProductCategoryKey"
+      }
+    ],
+    "annotations": [
+      {
+        "name": "ClientCompatibilityLevel",
+        "value": "600"
+      }
+    ]
+  },
+  "id": "SemanticModel"
+}
